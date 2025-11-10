@@ -1,0 +1,63 @@
+{
+  "students": [
+    {
+      "id": "s_r8jtnxm",
+      "name": "Lujan Bhandari",
+      "phone": "9851085737",
+      "course": "Motorcycle",
+      "package": {
+        "id": "bike_7",
+        "days": 7,
+        "label": "7 days",
+        "price": 3000
+      }
+    },
+    {
+      "id": "s_woc5yu0",
+      "name": "Rujan Bhandari",
+      "phone": "9851085701",
+      "course": "Car",
+      "package": {
+        "id": "car_20",
+        "days": 20,
+        "label": "20 days",
+        "price": 14000
+      }
+    },
+    {
+      "id": "s_7imt08i",
+      "name": "Pujan Bhandari",
+      "phone": "9851085730",
+      "course": "Motorcycle",
+      "package": {
+        "id": "bike_daily",
+        "days": 1,
+        "label": "Daily",
+        "price": 400
+      }
+    },
+    {
+      "id": "s_91qmf3u",
+      "name": "Pujan Bhandari",
+      "phone": "9851085700",
+      "course": "Car",
+      "package": {
+        "id": "car_30",
+        "days": 30,
+        "label": "30 days",
+        "price": 20000
+      }
+    }
+  ],
+  "attendance": [
+    {
+      "id": "a_58nc82p",
+      "studentId": "s_r8jtnxm",
+      "name": "Lujan Bhandari",
+      "phone": "9851085737",
+      "time": "2025-11-08T18:52:40.980Z"
+    }
+  ],
+  "transactions": [],
+  "products": []
+}

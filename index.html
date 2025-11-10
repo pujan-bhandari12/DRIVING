@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Driving Training Center — Attendance</title>
+  <!-- Modern fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">DTC</div>
+      <div class="brand-text"><div class="brand-title">DRIVING TRAINING CENTER</div><div class="brand-sub">Attendance</div></div>
+    </div>
+      <div class="top-actions">
+      <div class="status-wrap"><span id="server-status" class="muted">Server: unknown</span><span id="clock" class="muted" style="margin-left:12px"></span></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="btn-add-student" class="btn ghost">Add Student</button>
+        <button id="btn-sync-key" class="btn ghost">Sync Key</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <nav>
+        <a href="#dashboard" class="active">Dashboard</a>
+        <a href="#attendance">Attendance</a>
+        <a href="#students">Students</a>
+        <a href="#transactions">Transactions</a>
+      </nav>
+      <div class="footer-note">Nepal • Local + Server mode</div>
+    </aside>
+
+    <main class="main">
+      <section id="dashboard" class="panel">
+        <h2>Dashboard</h2>
+        <div class="cards">
+          <div class="card">
+            <div class="card-title">Students</div>
+            <div id="count-students" class="card-value">0</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Today Attendance</div>
+            <div id="count-attendance" class="card-value">0</div>
+          </div>
+            <!-- Transactions card removed from dashboard -->
+        </div>
+          <div class="dashboard-widgets" style="margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div class="box">
+              <h3>Due Soon (<=2 days & unpaid)</h3>
+              <ul id="due-soon-list" class="list" style="max-height:220px;overflow:auto"></ul>
+            </div>
+            <div class="box">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 style="margin:0">Discounts Given</h3>
+                <div class="date-control">
+                  <button class="date-toggle btn" data-pop="discounts-pop" aria-expanded="false" title="Open date selector">
+                    <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                      <path d="M16 3v4M8 3v4"></path>
+                      <path d="M3 11h18"></path>
+                    </svg>
+                  </button>
+                  <div id="discounts-pop" class="date-popover hidden" role="dialog" aria-label="Discounts date selector">
+                    <div class="date-pop-inner">
+                      <label style="display:flex;flex-direction:column;font-size:13px">Date <input id="discounts-date" type="date" /></label>
+                      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                        <button id="discounts-apply" class="btn">Apply</button>
+                        <button id="discounts-clear" class="btn ghost">Clear</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ul id="discounts-list" class="list" style="max-height:220px;overflow:auto"></ul>
+            </div>
+            <div class="box">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h3 style="margin:0">Payments</h3>
+                <div class="date-control">
+                  <button class="date-toggle btn" data-pop="payments-pop" aria-expanded="false" title="Open date selector">
+                    <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                      <path d="M16 3v4M8 3v4"></path>
+                      <path d="M3 11h18"></path>
+                    </svg>
+                  </button>
+                  <div id="payments-pop" class="date-popover hidden" role="dialog" aria-label="Payments date selector">
+                    <div class="date-pop-inner">
+                      <label style="display:flex;flex-direction:column;font-size:13px">Date <input id="payments-date" type="date" /></label>
+                      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                        <button id="payments-apply" class="btn">Apply</button>
+                        <button id="payments-clear" class="btn ghost">Clear</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="tx-by-course" style="display:flex;flex-direction:column;gap:8px">
+                <div class="card" style="padding:10px">
+                  <div class="card-title">Car</div>
+                  <div id="tx-car" class="card-value">NPR 0</div>
+                </div>
+                <div class="card" style="padding:10px">
+                  <div class="card-title">Motorcycle</div>
+                  <div id="tx-bike" class="card-value">NPR 0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- copyright badge shown only on dashboard -->
+        <div class="copyright-badge">Developed by Pujan Bhandari © 2025</div>
+      </section>
+
+      <section id="attendance" class="panel hidden">
+        <h2>Attendance</h2>
+        <div class="panel-grid">
+          <div class="box">
+            <h3>Register</h3>
+            <p>Use the manual check-in below to register attendance. The app will store records locally when the server is unavailable and sync them later.</p>
+            <hr />
+            <h4>Manual / Alternative Check-in</h4>
+            <p>If there is a power outage or you prefer manual entry, select a student and click check-in.</p>
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+              <div class="search-dropdown" style="flex:1;position:relative">
+                <input id="manual-search" placeholder="Search name or phone..." autocomplete="off" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);color:inherit" />
+                <ul id="manual-suggestions" class="suggestions hidden" role="listbox" aria-label="Student suggestions"></ul>
+              </div>
+              <button id="manual-search-btn" class="btn">Search</button>
+              <button id="manual-checkin" class="btn primary">Check-in</button>
+            </div>
+          </div>
+
+          <div class="box">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h3 style="margin:0">Today's Attendance</h3>
+                <div class="date-control">
+                <button class="date-toggle btn" data-pop="attendance-pop" aria-expanded="false" title="Open date selector">
+                  <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                    <path d="M16 3v4M8 3v4"></path>
+                    <path d="M3 11h18"></path>
+                  </svg>
+                </button>
+                <div id="attendance-pop" class="date-popover hidden" role="dialog" aria-label="Attendance date selector">
+                  <div class="date-pop-inner">
+                    <label style="display:flex;flex-direction:column;font-size:13px">Date <input id="attendance-date" type="date" /></label>
+                    <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                      <button id="attendance-apply" class="btn">Apply</button>
+                      <button id="attendance-clear" class="btn ghost">Clear</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul id="attendance-list" class="list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="students" class="panel hidden">
+        <h2>Students</h2>
+        <div class="panel-grid">
+          <div class="box">
+            <h3>Add Student</h3>
+            <form id="student-form" class="form">
+              <input id="stu-name" placeholder="Full name" required />
+              <input id="stu-phone" type="tel" maxlength="10" pattern="\d{10}" title="Enter 10 digit phone number" placeholder="Phone (10 digits)" />
+              <div class="search-dropdown" style="position:relative">
+                <input id="stu-course" placeholder="Course (type to search or add)" autocomplete="off" style="width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);color:inherit" />
+                <ul id="stu-course-suggestions" class="suggestions hidden" role="listbox" aria-label="Course suggestions" style="min-width:160px"></ul>
+              </div>
+                <div id="stu-packages" class="muted" style="margin-top:8px;display:none">
+                <!-- package options will be rendered here based on selected course -->
+                <div id="stu-package-row"></div>
+                <select id="stu-package-select" name="packageId"></select>
+                <div id="stu-package-summary" class="muted" style="margin-top:8px"></div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn primary">Save</button>
+                <button type="button" id="stu-clear" class="btn">Clear</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="box wide">
+            <h3>Student List</h3>
+            <div class="search-row" style="display:flex;gap:8px;align-items:center">
+              <input id="search-student" placeholder="Search by name or phone" style="flex:1;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);color:inherit" />
+              <button id="search-student-btn" class="btn">Search</button>
+              <button id="search-student-clear" class="btn ghost">Clear</button>
+              <span id="student-search-count" class="muted" style="margin-left:8px">&nbsp;</span>
+            </div>
+            <ul id="student-list" class="list"></ul>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="transactions" class="panel hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 style="margin:0">Transactions</h2>
+          <div class="date-control">
+            <button class="date-toggle btn" data-pop="tx-pop" aria-expanded="false" title="Open date selector">
+              <svg class="cal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                <path d="M16 3v4M8 3v4"></path>
+                <path d="M3 11h18"></path>
+              </svg>
+            </button>
+            <div id="tx-pop" class="date-popover hidden" role="dialog" aria-label="Transactions date selector">
+              <div class="date-pop-inner">
+                <label style="display:flex;flex-direction:column;font-size:13px">Date <input id="tx-date" type="date" /></label>
+                <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                  <button id="tx-apply" class="btn">Apply</button>
+                  <button id="tx-clear" class="btn ghost">Clear</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul id="transaction-list" class="list"></ul>
+      </section>
+      
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div id="modal" class="modal hidden" role="dialog">
+    <div class="modal-content">
+      <button id="modal-close" class="modal-close">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
